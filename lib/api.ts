@@ -1,50 +1,50 @@
 import axios from "axios"
-// import {useAuthStore} from "../stores/modules/auth";
-// import {useGlobalStore} from "../stores/global";
 
-const setup = (url: string) => {
-  const instance = axios.create({
-    baseURL: url,
-  })
+const api = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
+})
 
-  instance.interceptors.request.use(function (config: any) {
-    // const auth = useAuthStore();
+api.interceptors.request.use(function (config: any) {
+  let user = localStorage.getItem('poin-user')
+  // console.log('config')
+  if (user) {
+    user = JSON.parse(user)
+    // @ts-ignore
+    config.headers.Authorization = 'Bearer ' + user.token
+  }
 
-    // if (auth && auth.token)
-    //   config.headers.Authorization = 'Bearer ' + auth.token
+  return config
+}, function (error: any) {
+  // console.log('config error')
+  return Promise.reject(error)
+})
 
-    return config
-  }, function (error: any) {
-    return Promise.reject(error)
-  })
+api.interceptors.response.use((res: any) => {
+  // const global = useGlobalStore()
+  // console.log('response')
+  const { data } = res
 
-  instance.interceptors.response.use((res: any) => {
-    // const global = useGlobalStore()
+  const msg = res.status === 200 && !data.result && data.message
 
-    const { data } = res
+  // if (msg) global.setNotification(msg, 'success')
 
-    const msg = res.status === 200 && !data.result && data.message
+  return res.data
+}, function (error: any) {
+  // console.log('response error', error)
 
-    // if (msg) global.setNotification(msg, 'success')
+  const msg = error?.response?.data?.message || error?.response?.data?.error
 
-    return res.data
-  }, function (error: any) {
+  if (msg) {
+    const errorDesc = (typeof error.response.data?.error === 'string' && error.response.data?.error) || ''
+    // global.setNotification(msg, 'danger', msg === errorDesc ? '' : errorDesc)
+  }
+  else if (typeof error.code === 'string') {
+    // global.setNotification(error.message || error.code, 'danger')
+  }
 
-    const msg = error?.response?.data?.message || error?.response?.data?.error
+  return Promise.reject(error?.response)
+})
 
-    if (msg) {
-      const errorDesc = (typeof error.response.data?.error === 'string' && error.response.data?.error) || ''
-      // global.setNotification(msg, 'danger', msg === errorDesc ? '' : errorDesc)
-    }
-    else if (typeof error.code === 'string') {
-      // global.setNotification(error.message || error.code, 'danger')
-    }
-
-    return Promise.reject(error?.response)
-  })
-
-  return instance
-}
 
 // @ts-ignore
-export default setup(process.env.NEXT_PUBLIC_API_URL)
+export default api
