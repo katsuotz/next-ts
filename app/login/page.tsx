@@ -2,36 +2,29 @@
 
 import Image from 'next/image'
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
-import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
+import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {useForm} from "react-hook-form";
 import {Input} from "@/components/ui/input";
 import * as z from "zod"
 import {Button} from "@/components/ui/button";
 import {zodResolver} from "@hookform/resolvers/zod";
-import api from "@/lib/api";
+import {useAppDispatch} from "@/store";
+import {doLogin} from "@/features/auth/authActions";
 
 const formSchema = z.object({
   username: z.string(),
   password: z.string(),
 })
 
-export default function Home() {
+export default function Login() {
+  const dispatch = useAppDispatch()
+
   const form = useForm({
     resolver: zodResolver(formSchema),
   })
 
   const onSubmit = ({username, password}: any) => {
-    api.post('/login', {
-      username,
-      password,
-    }).then((res: any) => {
-      if (res?.data?.token) {
-        localStorage.setItem('poin-user', JSON.stringify(res.data))
-        location.href = '/'
-      }
-    }).catch((err: any) => {
-      console.log('err', err)
-    })
+    dispatch(doLogin(username, password))
   }
 
   return (

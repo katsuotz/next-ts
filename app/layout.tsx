@@ -1,25 +1,14 @@
 'use client'
 
-import './globals.css'
-import type { Metadata } from 'next'
+import '@/app/globals.css'
 import { Inter } from 'next/font/google'
-import Image from "next/image";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuIndicator,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
-  NavigationMenuViewport,
-} from "@/components/ui/navigation-menu"
-import Link from "next/link";
 import {Provider} from "react-redux";
 const inter = Inter({ subsets: ['latin'] })
 
-import {store} from "@/store";
+import {persistor, store} from "@/store";
+import { PersistGate } from 'redux-persist/integration/react'
+
+import Nav from "@/components/header/nav";
 
 // export const metadata: Metadata = {
 //   title: 'Create Next App',
@@ -31,47 +20,19 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  // api.get('/me').then((res: any) => {
-  //   console.log('result', res)
-  // })
-
   return (
     <html lang="en">
+    <head>
+      <title>Tes</title>
+    </head>
     <body className={inter.className}>
     <Provider store={store}>
-      <header
-        className="supports-backdrop-blur:bg-background/60 sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
-        <div className="container flex h-14 items-center justify-between">
-          <Image
-            src="/vercel.svg"
-            alt="Vercel Logo"
-            className=""
-            width={100}
-            height={24}
-            priority
-          />
-
-          <NavigationMenu>
-            <NavigationMenuList>
-              <NavigationMenuItem>
-                <Link href="/" legacyBehavior passHref>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    Home
-                  </NavigationMenuLink>
-                </Link>
-                <Link href="/login" legacyBehavior passHref>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    Login
-                  </NavigationMenuLink>
-                </Link>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
-        </div>
-      </header>
-      <main className="container relative py-6 lg:py-8">
-        {children}
-      </main>
+      <PersistGate loading={null} persistor={persistor}>
+        <Nav/>
+        <main className="container relative py-6 lg:py-8">
+          {children}
+        </main>
+      </PersistGate>
     </Provider>
     </body>
     </html>
