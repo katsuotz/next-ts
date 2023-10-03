@@ -9,10 +9,40 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import api from "@/lib/api";
+import {useEffect} from "react";
+import {useDispatch} from "react-redux";
+import { decrement, increment } from '@/features/counter/counterSlice'
+import {useAppSelector} from "@/store";
+import {Button} from "@/components/ui/button";
 
 export default function Home() {
+  const dispatch = useDispatch()
+  const slice = useAppSelector((state) => state.counter.value)
+
+  useEffect(() => {
+    api.get('/data-poin', {
+      params: {
+        page: 1,
+        per_page: 10,
+      }
+    }).then((res: any) => {
+      console.log('result')
+      // console.log('result', res)
+    }).catch((err: any) => {
+      // console.log('err', err)
+    })
+
+  }, [])
+
   return (
     <div>
+      {slice}
+
+      <br/>
+      <Button onClick={() => dispatch(increment())}>Increment</Button>
+      <Button onClick={() => dispatch(decrement())}>Decrement</Button>
+
       <Table>
         <TableHeader>
           <TableRow>

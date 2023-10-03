@@ -30,7 +30,7 @@ export default function Home() {
         location.href = '/'
       }
     }).catch((err: any) => {
-      console.log(err)
+      console.log('err', err)
     })
   }
 
