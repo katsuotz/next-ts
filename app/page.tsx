@@ -3,46 +3,31 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import api from "@/lib/api";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {useDispatch} from "react-redux";
-import { decrement, increment } from '@/features/counter/counterSlice'
 import {useAppSelector} from "@/store";
 import {Button} from "@/components/ui/button";
+import {getPoinData} from "@/features/poin/poinActions";
 
 export default function Home() {
   const dispatch = useDispatch()
-  const slice = useAppSelector((state) => state.counter.value)
+
+  const [page, setPage] = useState(1)
+  const [perPage, setPerPage] = useState(1)
+
+  const poin = useAppSelector(state => state.poin.poin)
 
   useEffect(() => {
-    api.get('/data-poin', {
-      params: {
-        page: 1,
-        per_page: 10,
-      }
-    }).then((res: any) => {
-      console.log('result')
-      // console.log('result', res)
-    }).catch((err: any) => {
-      // console.log('err', err)
-    })
-
+    dispatch(getPoinData(page, perPage))
   }, [])
 
   return (
     <div>
-      {slice}
-
-      <br/>
-      <Button onClick={() => dispatch(increment())}>Increment</Button>
-      <Button onClick={() => dispatch(decrement())}>Decrement</Button>
-
       <Table>
         <TableHeader>
           <TableRow>
@@ -56,12 +41,19 @@ export default function Home() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableRow>
-            <TableCell className="font-medium">INV001</TableCell>
-            <TableCell>Paid</TableCell>
-            <TableCell>Credit Card</TableCell>
-            <TableCell className="text-right">$250.00</TableCell>
-          </TableRow>
+          {
+            poin.map(function (item, key) {
+              return <TableRow key={item.id}>
+                <TableCell className="font-medium">{key + 1}</TableCell>
+                <TableCell>{item.title}</TableCell>
+                <TableCell>{item.description}</TableCell>
+                <TableCell>{item.type}</TableCell>
+                <TableCell>{item.category}</TableCell>
+                <TableCell>{item.poin}</TableCell>
+              </TableRow>
+            })
+          }
+
         </TableBody>
       </Table>
     </div>

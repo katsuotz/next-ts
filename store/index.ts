@@ -1,6 +1,7 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit'
-import counterReducer from '@/features/counter/counterSlice'
 import authReducer from '@/features/auth/authSlice'
+import counterReducer from '@/features/counter/counterSlice'
+import poinReducer from '@/features/poin/poinSlice'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 
 import { persistStore, persistReducer } from 'redux-persist'
@@ -17,6 +18,7 @@ const persistConfig = {
 const baseReducer = combineReducers({
   auth: authReducer,
   counter: counterReducer,
+  poin: poinReducer,
 })
 
 const persistedReducer = persistReducer(persistConfig, baseReducer)
