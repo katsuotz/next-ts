@@ -9,7 +9,7 @@ import * as z from "zod"
 import {Button} from "@/components/ui/button";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useAppDispatch} from "@/store";
-import {doLogin} from "@/features/auth/authActions";
+import {login} from "@/features/auth/authActions";
 
 const formSchema = z.object({
   username: z.string(),
@@ -24,7 +24,7 @@ export default function Login() {
   })
 
   const onSubmit = ({username, password}: any) => {
-    dispatch(doLogin(username, password))
+    dispatch(login(username, password))
   }
 
   return (

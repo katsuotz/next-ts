@@ -9,7 +9,7 @@ import {
   NavigationMenuList, navigationMenuTriggerStyle
 } from "@/components/ui/navigation-menu";
 import Link from "next/link";
-import {logout} from "@/features/auth/authSlice";
+import {logout} from "@/features/auth/authActions";
 
 export default function Nav() {
   const user = useAppSelector((state) => state.auth.user)

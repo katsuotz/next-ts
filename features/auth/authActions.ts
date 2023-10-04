@@ -1,16 +1,24 @@
 import api from "@/lib/api";
-import {login} from "@/features/auth/authSlice";
+import {updateUserData} from "@/features/auth/authSlice";
 
-export const doLogin = (username: any, password: any): any => {
+export const login = (username: any, password: any): any => {
   return (dispatch: any) => {
     api.post('/login', {
       username, password
     }).then(res => {
       if (res?.data?.token) {
-        dispatch(login(res.data))
+        dispatch(updateUserData(res.data))
+        location.href = '/'
       }
     }).catch(err => {
       console.log(err)
     })
+  }
+}
+
+export const logout = (): any => {
+  return (dispatch: any) => {
+    dispatch(updateUserData(null))
+    location.href = '/login'
   }
 }
