@@ -1,16 +1,15 @@
 import axios from "axios"
+import {store} from "@/store";
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
 })
 
 api.interceptors.request.use(function (config: any) {
-  let user = localStorage.getItem('poin-user')
-  // console.log('config')
-  if (user) {
-    user = JSON.parse(user)
-    // @ts-ignore
-    config.headers.Authorization = 'Bearer ' + user.token
+  const state = store.getState()
+
+  if (state.auth.user) {
+    config.headers.Authorization = 'Bearer ' + state.auth.user?.token
   }
 
   return config

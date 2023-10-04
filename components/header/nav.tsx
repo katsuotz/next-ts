@@ -1,7 +1,7 @@
 "use client"
 
 import Image from 'next/image'
-import {useAppDispatch, useAppSelector} from "@/store";
+import {useAppDispatch, store} from "@/store";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -12,7 +12,8 @@ import Link from "next/link";
 import {logout} from "@/features/auth/authActions";
 
 export default function Nav() {
-  const user = useAppSelector((state) => state.auth.user)
+  const state = store.getState()
+  const user = state.auth.user
   const dispatch = useAppDispatch()
 
   return (
