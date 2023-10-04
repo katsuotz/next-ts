@@ -1,18 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit'
-
-interface Poin {
-  id: number;
-  title: string;
-  description: string;
-  type: string;
-  category: string;
-  poin: number;
-}
+import {Poin} from "@/lib/interfaces/data-poin";
+import {Pagination} from "@/lib/interfaces/table";
 
 const initialState:{
   poin: Poin[];
+  pagination: Pagination;
 } = {
   poin: [],
+  pagination: {
+    page: 1,
+    total_page: 1,
+    per_page: 10,
+    total_item: 1,
+  }
 }
 
 export const poinSlice = createSlice({
@@ -22,9 +22,12 @@ export const poinSlice = createSlice({
     updatePoinData: (state, action) => {
       state.poin = action.payload
     },
+    updatePoinPagination: (state, action) => {
+      state.pagination = action.payload
+    },
   },
 })
 
-export const { updatePoinData } = poinSlice.actions
+export const { updatePoinData, updatePoinPagination } = poinSlice.actions
 
 export default poinSlice.reducer
