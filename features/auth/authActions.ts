@@ -1,7 +1,7 @@
 import api from "@/lib/api";
 import {updateUserData} from "@/features/auth/authSlice";
 
-export const login = (username: any, password: any): any => {
+export const login = (username: string, password: string): any => {
   return (dispatch: any) => {
     api.post('/login', {
       username, password
