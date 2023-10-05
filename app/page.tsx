@@ -20,9 +20,14 @@ export default function Home() {
     dispatch(getPoinData(page, perPage))
   }, [])
 
+  const handleUpdatePage = (value: number) => {
+    setPage(value)
+    dispatch(getPoinData(value, perPage))
+  }
+
   return (
     <div>
-      <DataTable columns={columns} data={poin} pagination={pagination} />
+      <DataTable columns={columns} data={poin} pagination={pagination} handleUpdatePage={handleUpdatePage}/>
     </div>
   )
 }

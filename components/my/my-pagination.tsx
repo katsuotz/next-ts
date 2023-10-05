@@ -16,22 +16,26 @@ export default function MyPagination(
     handleUpdatePage
   }: PaginationProps) {
 
-  const [page, setPage] = useState(1)
-  const [startPage, setStartPage] = useState(1)
-  const [endPage, setEndPage] = useState(1)
-  const [totalGeneratedPages, setTotalGeneratedPages] = useState(1)
+  const [page, setPage] = useState(0)
+  const [startPage, setStartPage] = useState(0)
+  const [endPage, setEndPage] = useState(0)
+  const [totalGeneratedPages, setTotalGeneratedPages] = useState(0)
 
-  useEffect(() => {
-    setStartPage(pagination.page - 2)
-    setEndPage(pagination.page + 2)
+  const generatePage = () => {
+    const startAt = pagination.page - 2
+    const endAt = pagination.page + 2
 
-    if (startPage <= 0) setStartPage(1)
-    if (endPage >= pagination.total_page) setEndPage(pagination.total_page)
+    setStartPage(startAt <= 0 ? 1 : pagination.page - 2)
+    setEndPage(endAt >= pagination.total_page ? pagination.total_page : pagination.page + 2)
 
     setTotalGeneratedPages(endPage - startPage + 1)
 
     setPage(pagination.page)
-  }, [pagination])
+  }
+
+  useEffect(() => {
+    generatePage()
+  });
 
   return (
     <div className="flex gap-2">
@@ -51,14 +55,22 @@ export default function MyPagination(
       </Button>
 
       {
+        startPage > 1 ?
+          <Button variant="outline" disabled>
+            ...
+          </Button> :
+          ''
+      }
+
+      {
         [...Array(totalGeneratedPages)].map((e, i) => <>
           <Button
             key={i}
             variant="outline"
             disabled={(i + startPage) == page}
-            onClick={() => handleUpdatePage(i + 1)}
+            onClick={() => handleUpdatePage(i + startPage)}
           >
-            {i + 1}
+            {i + startPage}
           </Button>
         </>)
       }

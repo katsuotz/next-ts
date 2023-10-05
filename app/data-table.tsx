@@ -23,6 +23,7 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   pagination: Pagination
+  handleUpdatePage: Function
 }
 
 export function DataTable<TData, TValue>(
@@ -30,6 +31,7 @@ export function DataTable<TData, TValue>(
     columns,
     data,
     pagination,
+    handleUpdatePage,
   }: DataTableProps<TData, TValue>) {
 
   const table = useReactTable({
@@ -37,10 +39,6 @@ export function DataTable<TData, TValue>(
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
-
-  const handleUpdatePage = (page: number) => {
-    console.log(page)
-  }
 
   return (
     <div>
